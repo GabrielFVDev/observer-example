@@ -1,16 +1,45 @@
-# flutter_application_3
+# Flutter Overlay Observer Example
 
-A new Flutter project.
+Este projeto demonstra como gerenciar overlays em Flutter utilizando um service centralizado e um `NavigatorObserver` personalizado para garantir que overlays sejam fechados automaticamente durante a navegação entre rotas.
 
-## Getting Started
+## Funcionalidades
 
-This project is a starting point for a Flutter application.
+- Exibição de overlays customizados em qualquer tela.
+- Fechamento automático do overlay ao navegar entre páginas (push/pop), usando um observer.
+- Fechamento manual do overlay por ação do usuário.
+- Navegação declarativa utilizando [Routefly](https://pub.dev/packages/routefly).
 
-A few resources to get you started if this is your first Flutter project:
+## Estrutura Principal
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- `lib/app/service/overlay_service.dart`: Service singleton para exibir e remover overlays.
+- `lib/app/observer/overlay_route_observer.dart`: Observer que fecha overlays automaticamente em navegação.
+- `lib/app/view/`: Contém as páginas do app, como `home_page.dart` e `teste_page.dart`.
+- `lib/app/app_widget.dart`: Widget principal, configura rotas e observers.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Como executar
+
+1. Instale as dependências:
+
+   ```sh
+   flutter pub get
+   ```
+
+2. Gere as rotas com o Routefly:
+
+   ```sh
+   dart run routefly
+   ```
+
+3. Execute o app:
+   ```sh
+   flutter run
+   ```
+
+## Recursos úteis
+
+- [Documentação Flutter](https://docs.flutter.dev/)
+- [Routefly](https://pub.dev/packages/routefly)
+
+---
+
+Projeto desenvolvido para estudo de navegação e overlays em Flutter.
