@@ -50,8 +50,9 @@ class VerificationStepCard extends StatelessWidget {
         statusColor = const Color(0xFFF59E0B);
         break;
       case VerificationState.initial:
-        statusIcon = Icons.circle_outlined;
-        statusColor = const Color(0xFF9CA3AF);
+        statusIcon = Icons.check_circle; // Mesmo ícone do success
+        statusColor =
+            const Color(0xFF9CA3AF).withValues(alpha: 0.2); // Mais transparente
         break;
     }
 
@@ -71,7 +72,8 @@ class VerificationStepCard extends StatelessWidget {
       case VerificationState.inProgress:
         return const Color(0xFFF59E0B);
       case VerificationState.initial:
-        return const Color(0xFF9CA3AF);
+        return const Color(0xFF9CA3AF)
+            .withValues(alpha: 0.2); // Mesma transparência
     }
   }
 
@@ -120,10 +122,11 @@ class VerificationStepCard extends StatelessWidget {
   }
 
   /// Gets button text color based on state
-  Color _getButtonTextColor() {
-    return state == VerificationState.initial
-        ? Colors.white
-        : const Color(0xFF6B7280);
+  StateButton _getButtonState() {
+    if (state == VerificationState.initial && onActionPressed != null) {
+      return StateButton.success;
+    }
+    return StateButton.disabled;
   }
 
   /// Gets button onPressed callback based on state
@@ -136,9 +139,8 @@ class VerificationStepCard extends StatelessWidget {
     return Container(
       width: 140,
       height: 236,
-      margin: const EdgeInsets.only(right: 12.0),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0xFFF8F8F9),
         borderRadius: BorderRadius.circular(12.0),
         border: Border.all(
           color: _getBorderColor(),
@@ -148,78 +150,65 @@ class VerificationStepCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Icon(
-                      icon,
-                      color: const Color(0xFF6B7280),
-                      size: 18,
-                    ),
-                    _buildStatusIcon(),
-                  ],
-                ),
-                const SizedBox(height: 12.0),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF111827),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Header com ícone e status
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Icon(
+                        icon,
+                        color: const Color(0xFF6B7280),
+                        size: 18,
+                      ),
+                      _buildStatusIcon(),
+                    ],
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 8.0),
-                Text(
-                  description,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Color(0xFF6B7280),
-                    height: 1.3,
-                  ),
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-          ),
-          const Spacer(),
-          // Botão para estado initial e success
-          if (_shouldShowButton())
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 32,
-                child: ElevatedButton(
-                  onPressed: _getButtonOnPressed(),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _getButtonBackgroundColor(),
-                    foregroundColor: _getButtonTextColor(),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
-                    elevation: 0,
-                    padding: EdgeInsets.zero,
-                  ),
-                  child: Text(
-                    _getStatusText(),
+                  const SizedBox(height: 12.0),
+                  // Título
+                  Text(
+                    title,
                     style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF111827),
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 8.0),
+                  // Descrição
+                  Expanded(
+                    child: Text(
+                      description,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Color(0xFF6B7280),
+                        height: 1.3,
+                      ),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                ),
+                  // Botão (apenas para initial e success)
+                  if (_shouldShowButton())
+                    CoinButton.bigRounded(
+                      label: _getStatusText(),
+                      onPressed: _getButtonOnPressed() ?? () {},
+                      state: _getButtonState(),
+                      color: _getButtonBackgroundColor(),
+                      width: double.infinity,
+                      height: 48,
+                    ),
+                ],
               ),
             ),
-          // Faixa preta para estados error e inProgress
+          ),
+          // Faixa preta (fora do padding para ocupar toda largura)
           if (_shouldShowBlackStripe())
             Container(
               width: double.infinity,
