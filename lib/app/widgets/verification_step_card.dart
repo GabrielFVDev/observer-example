@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/app/widgets/buttons/coin_button.dart';
 
-enum VerificationState { initial, success, error, inProgress }
+enum DocumentState { initial, success, error, inProgress }
 
-class VerificationStepCard extends StatelessWidget {
+class CoinVerificationStep extends StatelessWidget {
   /// Title of the verification step
   final String title;
 
@@ -14,7 +14,7 @@ class VerificationStepCard extends StatelessWidget {
   final IconData icon;
 
   /// Current state of the verification
-  final VerificationState state;
+  final DocumentState state;
 
   /// Callback when action button is pressed (only available in initial state)
   final VoidCallback? onActionPressed;
@@ -22,12 +22,12 @@ class VerificationStepCard extends StatelessWidget {
   /// Action button text (defaults to "Enviar")
   final String actionButtonText;
 
-  const VerificationStepCard({
+  const CoinVerificationStep({
     super.key,
     required this.title,
     required this.description,
     required this.icon,
-    this.state = VerificationState.initial,
+    this.state = DocumentState.initial,
     this.onActionPressed,
     this.actionButtonText = 'Enviar',
   });
@@ -37,19 +37,19 @@ class VerificationStepCard extends StatelessWidget {
     Color statusColor;
 
     switch (state) {
-      case VerificationState.success:
+      case DocumentState.success:
         statusIcon = Icons.check_circle;
         statusColor = const Color(0xFF22C55E);
         break;
-      case VerificationState.error:
+      case DocumentState.error:
         statusIcon = Icons.error;
         statusColor = const Color(0xFFEF4444);
         break;
-      case VerificationState.inProgress:
+      case DocumentState.inProgress:
         statusIcon = Icons.access_time;
         statusColor = const Color(0xFFF59E0B);
         break;
-      case VerificationState.initial:
+      case DocumentState.initial:
         statusIcon = Icons.check_circle; // Mesmo ícone do success
         statusColor =
             const Color(0xFF9CA3AF).withValues(alpha: 0.2); // Mais transparente
@@ -65,13 +65,13 @@ class VerificationStepCard extends StatelessWidget {
 
   Color _getStatusColor() {
     switch (state) {
-      case VerificationState.success:
+      case DocumentState.success:
         return const Color(0xFF22C55E);
-      case VerificationState.error:
+      case DocumentState.error:
         return const Color(0xFFEF4444);
-      case VerificationState.inProgress:
+      case DocumentState.inProgress:
         return const Color(0xFFF59E0B);
-      case VerificationState.initial:
+      case DocumentState.initial:
         return const Color(0xFF9CA3AF)
             .withValues(alpha: 0.2); // Mesma transparência
     }
@@ -79,51 +79,49 @@ class VerificationStepCard extends StatelessWidget {
 
   String _getStatusText() {
     switch (state) {
-      case VerificationState.success:
+      case DocumentState.success:
         return 'Reenviado';
-      case VerificationState.error:
+      case DocumentState.error:
         return 'Negado';
-      case VerificationState.inProgress:
+      case DocumentState.inProgress:
         return 'Em análise';
-      case VerificationState.initial:
+      case DocumentState.initial:
         return actionButtonText;
     }
   }
 
   /// Gets border color based on verification state
   Color _getBorderColor() {
-    return state == VerificationState.success
+    return state == DocumentState.success
         ? const Color(0xFF22C55E)
         : const Color(0xFFE5E7EB);
   }
 
   /// Gets border width based on verification state
   double _getBorderWidth() {
-    return state == VerificationState.success ? 2.0 : 1.0;
+    return state == DocumentState.success ? 2.0 : 1.0;
   }
 
   /// Checks if should show button (initial or success states)
   bool _shouldShowButton() {
-    return state == VerificationState.initial ||
-        state == VerificationState.success;
+    return state == DocumentState.initial || state == DocumentState.success;
   }
 
   /// Checks if should show black stripe (error or inProgress states)
   bool _shouldShowBlackStripe() {
-    return state == VerificationState.error ||
-        state == VerificationState.inProgress;
+    return state == DocumentState.error || state == DocumentState.inProgress;
   }
 
   /// Gets button background color based on state
   Color _getButtonBackgroundColor() {
-    return state == VerificationState.initial
+    return state == DocumentState.initial
         ? const Color(0xFF111111)
         : const Color(0xFFE5E7EB);
   }
 
   /// Gets button text color based on state
   StateButton _getButtonState() {
-    if (state == VerificationState.initial && onActionPressed != null) {
+    if (state == DocumentState.initial && onActionPressed != null) {
       return StateButton.success;
     }
     return StateButton.disabled;
@@ -131,7 +129,7 @@ class VerificationStepCard extends StatelessWidget {
 
   /// Gets button onPressed callback based on state
   VoidCallback? _getButtonOnPressed() {
-    return state == VerificationState.initial ? onActionPressed : null;
+    return state == DocumentState.initial ? onActionPressed : null;
   }
 
   @override
