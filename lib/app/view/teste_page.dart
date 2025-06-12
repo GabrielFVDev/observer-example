@@ -11,11 +11,43 @@ class TestePage extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
           onPressed: () async {
-            await BottomSheetService.showModal(
+            CoinModalBottomSheetService().showCustomBottomSheet(
               context: context,
-              builder: (context) => const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text('Conteúdo do BottomSheet'),
+              height: 220,
+              builder: (context) => Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Row(
+                      children: [
+                        Expanded(
+                          child: Center(
+                            child: Text(
+                              'Anexar Documento',
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        // Implementar lógica para abrir a câmera
+                      },
+                      icon: const Icon(Icons.camera_alt),
+                      label: const Text('Abrir Câmera'),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        // Implementar lógica para escolher um documento
+                      },
+                      icon: const Icon(Icons.attach_file),
+                      label: const Text('Escolher Documento'),
+                    ),
+                  ],
+                ),
               ),
             );
           },
